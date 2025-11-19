@@ -3,6 +3,7 @@ import io
 import sys
 import dotenv
 import pyautogui
+import pygetwindow as gw
 import google.generativeai as genai
 from accessible_output2.outputs.nvda import NVDA
 
@@ -34,13 +35,35 @@ def describe_screen():
         model = genai.GenerativeModel("gemini-flash-latest")
         print("Gemini API configured successfully.")
 
-        # 3. Take a screenshot
-        print("Taking screenshot...")
-        screenshot = pyautogui.screenshot()
+        # 3. Take a screenshot of the active window
+        print("Getting active window and taking screenshot...")
+        try:
+            active_window = gw.getActiveWindow()
+            if active_window:
+                # Capture the region of the active window
+                screenshot = pyautogui.screenshot(
+                    region=(
+                        active_window.left,
+                        active_window.top,
+                        active_window.width,
+                        active_window.height,
+                    )
+                )
+                print("Screenshot of active window taken successfully.")
+            else:
+                # Fallback to full screen if no active window
+                screenshot = pyautogui.screenshot()
+                print("No active window found, took full screenshot.")
+        except Exception as e:
+            # Fallback to full screen on any error (e.g., window minimized)
+            print(f"Could not get active window ({e}), taking full screenshot.")
+            screenshot = pyautogui.screenshot()
+
+        # 4. Convert screenshot to bytes
         img_byte_arr = io.BytesIO()
         screenshot.save(img_byte_arr, format="PNG")
         img_byte_arr = img_byte_arr.getvalue()
-        print("Screenshot taken successfully.")
+        print("Screenshot converted to bytes.")
 
         image_part = {"mime_type": "image/png", "data": img_byte_arr}
         prompt_part = "I am a blind user. Briefly describe the UI element or window state currently in focus. Be concise."
