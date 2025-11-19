@@ -6,3 +6,7 @@
 Echo brief: user.accessibility_describe_screen("brief")
 Echo actions: user.accessibility_describe_screen("actions")
 Echo read: user.accessibility_describe_screen("read")
+
+# --- Debugging Commands ---
+test: user.accessibility_test()
+test output: user.accessibility_test_output()
