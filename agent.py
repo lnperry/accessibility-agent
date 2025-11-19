@@ -12,12 +12,13 @@ print("Agent script started.")
 # Load environment variables from .env file
 dotenv.load_dotenv()
 
+
 def describe_screen():
     """
     Takes a screenshot, sends it to the Gemini API, and speaks the description.
     """
     nvda = NVDA()
-    
+
     # 1. Get API Key
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -30,14 +31,14 @@ def describe_screen():
         # 2. Configure the Gemini API
         print("Configuring Gemini API...")
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-flash-latest')
+        model = genai.GenerativeModel("gemini-flash-latest")
         print("Gemini API configured successfully.")
 
         # 3. Take a screenshot
         print("Taking screenshot...")
         screenshot = pyautogui.screenshot()
         img_byte_arr = io.BytesIO()
-        screenshot.save(img_byte_arr, format='PNG')
+        screenshot.save(img_byte_arr, format="PNG")
         img_byte_arr = img_byte_arr.getvalue()
         print("Screenshot taken successfully.")
 
@@ -64,6 +65,7 @@ def describe_screen():
         error_msg = f"An error occurred in the agent script: [{error_type}] {e}"
         print(error_msg, file=sys.stderr)
         nvda.speak("An error occurred. Please check the Talon log for details.")
+
 
 if __name__ == "__main__":
     describe_screen()
