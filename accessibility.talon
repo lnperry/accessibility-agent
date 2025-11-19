@@ -1,8 +1,8 @@
-# Main command
-describe: user.accessibility_describe_screen()
+# Project Echo: Voice Commands
 
-# Simple command for testing
-test: user.accessibility_test()
+# The core voice commands for interacting with the accessibility agent.
+# These commands map spoken phrases to the different interaction modes.
 
-# Command to test NVDA output
-test output: user.accessibility_test_output()
+Echo brief: user.accessibility_describe_screen("brief")
+Echo actions: user.accessibility_describe_screen("actions")
+Echo read: user.accessibility_describe_screen("read")
